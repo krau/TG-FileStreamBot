@@ -98,10 +98,6 @@ func getStreamRoute(ctx *gin.Context) {
 	ctx.Header("Content-Disposition", fmt.Sprintf("%s; filename=\"%s\"", disposition, file.FileName))
 
 	if r.Method != "HEAD" {
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
 		lr, _ := utils.NewTelegramReader(ctx, worker.Client, file.Location, start, end, contentLength)
 		if _, err := io.CopyN(w, lr, contentLength); err != nil {
 			log.Error("Error while copying stream", zap.Error(err))
